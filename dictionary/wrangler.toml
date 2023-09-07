@@ -1,0 +1,13 @@
+name = "dictionary"
+main = "src/index.ts"
+compatibility_date = "2023-09-07"
+usage_model = "bundled"
+env = { }
+
+[route]
+pattern = "etsy.patrickmeenan.com/*"
+zone_name = ""
+script = "dictionary"
+
+[triggers]
+crons = [ ]

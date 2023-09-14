@@ -4,6 +4,5 @@ compatibility_date = "2023-09-07"
 usage_model = "bundled"
 account_id = "63646222aa5ce1674c031721cf9f6db5"
 env = { }
-
 workers_dev = false
 route = {pattern = "etsy.patrickmeenan.com/*", zone_id = "e35d85043d6753270e79453555b4adef"}

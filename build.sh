@@ -1,0 +1,1 @@
+wrangler deploy --dry-run --outdir=dist

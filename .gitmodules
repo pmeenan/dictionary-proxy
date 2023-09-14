@@ -1,0 +1,3 @@
+[submodule "zstd-wasm-compress"]
+	path = zstd-wasm-compress
+	url = https://github.com/pmeenan/zstd-wasm-compress.git

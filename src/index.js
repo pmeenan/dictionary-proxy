@@ -1,27 +1,7 @@
 import zstdlib from "../zstd-wasm-compress/bin/zstdlib.js";
 import zstdwasm from "../zstd-wasm-compress/bin/zstdlib.wasm";
 
-// we send our own instantiateWasm function
-// to the zstdlib module
-// so we can initialize the WASM instance ourselves
-// since Workers puts your wasm file in global scope
-// as a binding. In this case, this binding is called
-// `wasm` as that is the name Wrangler uses
-// for any uploaded wasm module
-let zstdlib_module = new Promise((resolve, reject) => {
-  zstdlib({
-    instantiateWasm(info, receive) {
-      let instance = new WebAssembly.Instance(zstdwasm, info);
-      receive(instance);
-      return instance.exports;
-    },
-    locateFile(path, scriptDirectory) {
-      // scriptDirectory is undefined, so this is a
-      // no-op to avoid exception "TypeError: Invalid URL string."
-      return path
-    },
-  })
-});
+let zstd = null;
 
 export default {
   async fetch(request) {
@@ -46,13 +26,34 @@ export default {
         body = body.replaceAll('<link rel="canonical" href="https://' + host, '<link rel="canonical" href="https://www.etsy.com');
         body = body.replaceAll('<link rel="alternate" href="https://' + host, '<link rel="alternate" href="https://www.etsy.com');
 
-        // See if dictionary compression was requested (TODO)
-        console.log("awaiting the zstdlib init")
-        let zstd = await zstdlib_module;
-        /*
-        ver = zstd.versionNumber()
-        
+        // we send our own instantiateWasm function
+        // to the zstdlib module
+        // so we can initialize the WASM instance ourselves
+        // since Workers puts your wasm file in global scope
+        // as a binding. In this case, this binding is called
+        // `wasm` as that is the name Wrangler uses
+        // for any uploaded wasm module
+        if (!zstd) {
+          zstd = await zstdlib({
+            instantiateWasm(info, receive) {
+              console.log("instantiateWasm");
+              let instance = new WebAssembly.Instance(zstdwasm, info);
+              receive(instance);
+              return instance.exports;
+            },
+            locateFile(path, scriptDirectory) {
+              // scriptDirectory is undefined, so this is a
+              // no-op to avoid exception "TypeError: Invalid URL string."
+              console.log("locateFile");
+              return path
+            },
+          });
+        }
 
+        // See if dictionary compression was requested (TODO)
+        ver = zstd.versionNumber()
+
+        /*
         // Try ZStandard if it was advertised
         if (request.cf.clientAcceptEncoding.indexOf("zstd")) {
           body = compress(body, 10);

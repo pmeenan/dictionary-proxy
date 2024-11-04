@@ -1,8 +1,12 @@
 name = "dictionary"
 main = "src/index.js"
-compatibility_date = "2023-09-07"
-usage_model = "bundled"
+compatibility_date = "2024-10-29"
+assets = { directory = "./assets/", binding = "ASSETS", html_handling = "none", not_found_handling = "none" }
 account_id = "63646222aa5ce1674c031721cf9f6db5"
 env = { }
 workers_dev = false
 route = {pattern = "etsy.patrickmeenan.com/*", zone_id = "e35d85043d6753270e79453555b4adef"}
+
+[observability]
+enabled = true
+head_sampling_rate = 1

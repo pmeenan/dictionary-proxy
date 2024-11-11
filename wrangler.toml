@@ -7,7 +7,9 @@ env = { }
 workers_dev = false
 routes = [
     {pattern = "etsy.patrickmeenan.com/*", zone_id = "e35d85043d6753270e79453555b4adef"},
-    {pattern = "cnn.patrickmeenan.com", custom_domain = true}
+    {pattern = "cnn.patrickmeenan.com", custom_domain = true},
+    {pattern = "roe.patrickmeenan.com", custom_domain = true},
+    {pattern = "nuxt.patrickmeenan.com", custom_domain = true},
 ]
 
 [observability]

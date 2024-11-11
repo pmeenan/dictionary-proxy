@@ -14,7 +14,9 @@ const compressionWindowLog = 22;  // Compression window should be at least as lo
 // Proxied sites and their dictionaries
 const SITES = {
   "etsy.patrickmeenan.com": {"dictionary": "/etsy.dat", "origin": "www.etsy.com"},
-  "cnn.patrickmeenan.com": {"dictionary": "/cnn.dat", "origin": "www.cnn.com"}
+  "cnn.patrickmeenan.com": {"dictionary": "/cnn.dat", "origin": "www.cnn.com"},
+  "roe.patrickmeenan.com": {"dictionary": "/roe.dat", "origin": "roe.dev"},
+  "nuxt.patrickmeenan.com": {"dictionary": "/nuxt.dat", "origin": "nuxt.com"},
 }
 
 // Internal globals for managing state while waiting for the dictionary and zstd wasm to load
@@ -55,19 +57,25 @@ export default {
         const original = await fetch(url.toString(), request);
         const dictionary = await dictionaryPromise;
 
-        if (original.ok && dictionary !== null) {
-          const response = compressResponse(original, dictionary, headers, ctx, host, origin);
-          return response;
-        } else {
-          let location = original.headers.get("location");
-          if (location) {
-            const response = new Response(original.body, original);
-            location = location.replaceAll(origin, host);
-            response.headers.set("location", location);
+        if (original.status == 200) {
+          if (dictionary !== null) {
+            const response = compressResponse(original, dictionary, headers, ctx, host, origin);
             return response;
           } else {
-            return rewriteResponse(ctx, original, headers, host, origin);
+            let location = original.headers.get("location");
+            if (location) {
+              const response = new Response(original.body, original);
+              location = location.replaceAll(origin, host);
+              response.headers.set("location", location);
+              return response;
+            } else {
+              return rewriteResponse(ctx, original, headers, host, origin);
+            }
           }
+        } else {
+          url.hostname = origin;
+          const original = await fetch(url.toString(), request);
+          return addHeaders(original, headers);
         }
       } else {
         const original = await fetch(url.toString(), request);

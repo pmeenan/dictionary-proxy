@@ -10,8 +10,8 @@ routes = [
     {pattern = "cnn.patrickmeenan.com", custom_domain = true},
     {pattern = "roe.patrickmeenan.com", custom_domain = true},
     {pattern = "nuxt.patrickmeenan.com", custom_domain = true},
+    {pattern = "ray-ban.patrickmeenan.com", custom_domain = true},
 ]
 
 [observability]
-enabled = true
-head_sampling_rate = 1
+enabled = false

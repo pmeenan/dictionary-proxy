@@ -17,6 +17,7 @@ const SITES = {
   "cnn.patrickmeenan.com": {"dictionary": "/cnn.dat", "origin": "www.cnn.com"},
   "roe.patrickmeenan.com": {"dictionary": "/roe.dat", "origin": "roe.dev"},
   "nuxt.patrickmeenan.com": {"dictionary": "/nuxt.dat", "origin": "nuxt.com"},
+  "ray-ban.patrickmeenan.com": {"dictionary": "/ray-ban.dat", "origin": "www.ray-ban.com"},
 }
 
 // Internal globals for managing state while waiting for the dictionary and zstd wasm to load
